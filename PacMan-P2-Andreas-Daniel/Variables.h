@@ -6,5 +6,6 @@
 struct variablesValue {
 	bool run = true;
 	bool win = false;
-	bool loose = false;
+	int lifes = 1;
+	int pwup_points = 10;
 }; 

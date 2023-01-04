@@ -109,6 +109,7 @@ void Logic()
         {
             if (enemigos[i].Logic(&pacman_map, playerPos)) {
                 playerDie = true;
+                value.lifes--;
             }
         }
         if (playerDie) {
@@ -159,7 +160,7 @@ void Logic()
             break;
         case Map::MAP_TILES::MAP_POWERUP:
             pacman_map.points--;
-            player_points+= 10;
+            player_points+= value.pwup_points;
             pacman_map.SetTile(player_x_new, player_y_new, Map::MAP_TILES::MAP_EMPTY);
             break;
         }
@@ -186,7 +187,7 @@ void Draw()
     std::cout << player_char;
     ConsoleUtils::Console_ClearCharacter({ 0,(short)pacman_map.Height });
     ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::CYAN);
-    std::cout << "Puntuacion actual: " << player_points << " Puntuacion pendiente: " << pacman_map.points << std::endl;
+    std::cout << "Puntuacion actual: " << player_points << " Puntuacion pendiente: " << pacman_map.points << " Vidas: " << value.lifes << std::endl;
 
     std::cout << "Fotogramas: " << TimeManager::getInstance().frameCount << std::endl;
     std::cout << "DeltaTime: " << TimeManager::getInstance().deltaTime << std::endl;
@@ -196,6 +197,12 @@ void Draw()
     {
         ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::GREEN);
         std::cout << "Has ganado!" << std::endl;
+    }
+    if (value.lifes <= 0) 
+    {
+        ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::GREEN);
+        std::cout << "HAS PERDIDO!" << std::endl;
+        value.run = false;
     }
 
     TimeManager::getInstance().NextFrame();
