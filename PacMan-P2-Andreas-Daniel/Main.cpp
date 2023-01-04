@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "TimeManager.h"
+#include "Variables.h"
 #include <vector>
 
 /// <summary>
@@ -19,6 +20,8 @@ void Logic();
 /// </summary>
 void Draw();
 
+variablesValue value;
+
 enum USER_INPUTS { NONE, UP, DOWN, RIGHT, LEFT, QUIT };
 Map pacman_map = Map();
 std::vector<Enemy> enemigos = std::vector<Enemy>();
@@ -27,14 +30,12 @@ int player_x = 1;
 int player_y = 1;
 int player_points = 0;
 USER_INPUTS input = USER_INPUTS::NONE;
-bool run = true;
-bool win = false;
 
 int main()
 {
 
     Setup();
-    while (run)
+    while (value.run)
     {
         Input();
         Logic();
@@ -89,12 +90,12 @@ void Input()
 
 void Logic()
 {
-    if (win)
+    if (value.win)
     {
         switch (input)
         {
         case QUIT:
-            run = false;
+            value.run = false;
             break;
         }
     }
@@ -131,7 +132,7 @@ void Logic()
             player_x_new--;
             break;
         case QUIT:
-            run = false;
+            value.run = false;
             break;
         }
         if (player_x_new < 0)
@@ -167,7 +168,7 @@ void Logic()
         player_x = player_x_new;
         if (pacman_map.points <= 0)
         {
-            win = true;
+            value.win = true;
         }
     }
 }
@@ -191,7 +192,7 @@ void Draw()
     std::cout << "DeltaTime: " << TimeManager::getInstance().deltaTime << std::endl;
     std::cout << "Time: " << TimeManager::getInstance().time << std::endl;
 
-    if (win)
+    if (value.win)
     {
         ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::GREEN);
         std::cout << "Has ganado!" << std::endl;

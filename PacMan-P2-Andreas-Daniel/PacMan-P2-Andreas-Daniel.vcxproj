@@ -23,6 +23,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="TimeManager.h" />
+    <ClInclude Include="Variables.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Enemy.cpp" />
