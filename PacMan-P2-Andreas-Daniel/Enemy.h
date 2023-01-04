@@ -9,7 +9,7 @@ class Enemy
 public:
 	COORD position;
 private:
-	char character = 'E';
+	char character = 'n';
 	ConsoleUtils::CONSOLE_COLOR foreground = ConsoleUtils::CONSOLE_COLOR::DARK_RED;
 	ConsoleUtils::CONSOLE_COLOR background = ConsoleUtils::CONSOLE_COLOR::BLACK;
 

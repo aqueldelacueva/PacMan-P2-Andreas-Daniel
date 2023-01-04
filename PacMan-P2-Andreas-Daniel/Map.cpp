@@ -12,13 +12,13 @@ Map::Map()
 		{"#.#.################ ## ################.#.#"},
 		{"#.#.#                ##                #.#.#"},
 		{"#.#.  # ############################ #  .#.#"},
-		{"#.#.# # #            ##              # #.#.#"},
+		{"#.#.# # #            ##       *      # #.#.#"},
 		{"#. .# # # ########## ## ############ # #. .#"},
 		{"#. .# #     E        ##        P     # #. .#"},
 		{"#. .# # # ########## ## ############ # #. .#"},
 		{"#.#.# # #            ##              # #.#.#"},
 		{"#.#.  # ############################ #  .#.#"},
-		{"#.#.#                ##                #.#.#"},
+		{"#.#.#       *        ##                #.#.#"},
 		{"#.#.################ ## ################.#.#"},
 		{" .#......................................#. "},
 		{" .##################    ##################. "},
@@ -39,6 +39,10 @@ Map::Map()
 			points++;
 			storedmap[i] = (MAP_TILES)tile;
 			break;
+		case MAP_TILES::MAP_POWERUP:
+			points+= 10;
+			storedmap[i] = (MAP_TILES)tile;
+			break;
 		case 'P':
 			spawn_player.X = x;
 			spawn_player.Y = y;
@@ -57,9 +61,11 @@ Map::Map()
 	foregrounds[MAP_TILES::MAP_EMPTY] = ConsoleUtils::CONSOLE_COLOR::BLACK;
 	foregrounds[MAP_TILES::MAP_WALL] = ConsoleUtils::CONSOLE_COLOR::DARK_BLUE;
 	foregrounds[MAP_TILES::MAP_POINT] = ConsoleUtils::CONSOLE_COLOR::DARK_YELLOW;
+	foregrounds[MAP_TILES::MAP_POWERUP] = ConsoleUtils::CONSOLE_COLOR::DARK_YELLOW;
 	backgrounds[MAP_TILES::MAP_EMPTY] = ConsoleUtils::CONSOLE_COLOR::BLACK;
 	backgrounds[MAP_TILES::MAP_WALL] = ConsoleUtils::CONSOLE_COLOR::DARK_BLUE;
 	backgrounds[MAP_TILES::MAP_POINT] = ConsoleUtils::CONSOLE_COLOR::BLACK;
+	backgrounds[MAP_TILES::MAP_POWERUP] = ConsoleUtils::CONSOLE_COLOR::BLACK;
 }
 
 Map::~Map()
