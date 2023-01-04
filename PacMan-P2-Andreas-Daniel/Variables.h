@@ -7,4 +7,4 @@ struct variablesValue {
 	bool run = true;
 	bool win = false;
 	bool loose = false;
-};
+}; 
