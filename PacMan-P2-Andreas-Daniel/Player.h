@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ConsoleUtils.h"
 #include "Map.h"
 #include "Enemy.h"
 #include "Variables.h"
@@ -15,7 +16,7 @@ public:
 	// Constructor del jugador
 	Player(int x, int y);
 
-	void HandInput();
+	void Input();
 	void Update(const Map& map, std::vector<Enemy>& enemies, variablesValue& value);
 	void Draw() const;
 
