@@ -29,8 +29,8 @@ public:
 private:
 	int x_;
 	int y_;
-	char player_char_ = 'O';
-	int player_points_ = 0;
+	char player_char = 'O';
+	int player_points = 0;
 	USER_INPUTS input_ = USER_INPUTS::NONE;
 
 };
