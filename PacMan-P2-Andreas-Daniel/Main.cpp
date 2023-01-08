@@ -49,15 +49,12 @@ void Setup()
 
     srand(time(NULL));
 
-    int enemy_count = 0;
+    
 
     std::cout << "How many enemies do you want?" << std::endl;
-    std::cin >> enemy_count;
+    std::cin >> value.enemy_count;
 
-    for (size_t i = 0; i < enemy_count; i++)
-    {
-        enemigos.push_back(Enemy(pacman_map.spawn_enemy));
-    }
+    
 
     player_x = pacman_map.spawn_player.X;
     player_y = pacman_map.spawn_player.Y;
@@ -180,6 +177,19 @@ void Logic()
         {
             value.win = true;
         }
+        if (value.spawn_countdown < TimeManager::getInstance().time) {
+            if (value.enemy_current >= value.enemy_count) {
+            }
+            else {
+                for (size_t i = 0; i < 1; i++)
+                {
+                    enemigos.push_back(Enemy(pacman_map.spawn_enemy));
+                }
+                value.enemy_current++;
+                value.spawn_countdown += value.spawn_time;
+            }
+        }
+        
     }
 }
 
@@ -197,12 +207,16 @@ void Draw()
     ConsoleUtils::Console_ClearCharacter({ 0,(short)pacman_map.Height });
     ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::CYAN);
     std::cout << "Puntuacion actual: " << player_points << " Puntuacion pendiente: " << pacman_map.points << " Vidas: " << value.lifes << std::endl;
-    std::cout << "Kill " << value.kill << " CountDown " << value.powerUp_countdown << " time " << value.powerUp_time << std::endl;
+    
 
     std::cout << "Fotogramas: " << TimeManager::getInstance().frameCount << std::endl;
     std::cout << "DeltaTime: " << TimeManager::getInstance().deltaTime << std::endl;
     std::cout << "Time: " << TimeManager::getInstance().time << std::endl;
-
+    std::cout << " " << std::endl;
+    if (value.kill)
+    {
+        std::cout << "POWERUP!" << std::endl;
+    }
     if (TimeManager::getInstance().time > value.powerUp_countdown) {
         value.powerUp_countdown = 0;
         value.kill = false;
@@ -218,6 +232,7 @@ void Draw()
         std::cout << "HAS PERDIDO!" << std::endl;
         value.run = false;
     }
+    
 
     TimeManager::getInstance().NextFrame();
 }

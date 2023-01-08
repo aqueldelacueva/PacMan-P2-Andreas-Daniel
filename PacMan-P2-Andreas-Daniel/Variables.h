@@ -13,4 +13,8 @@ struct variablesValue {
 	bool kill = false;
 	const float powerUp_time = 15;
 	int powerUp_countdown = 0;
+	int spawn_countdown = 10;
+	int spawn_time = 10;
+	int enemy_current = 0;
+	int enemy_count = 0;
 }; 

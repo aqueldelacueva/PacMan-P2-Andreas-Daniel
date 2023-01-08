@@ -1,4 +1,7 @@
 #include "Enemy.h"
+#include "Variables.h"
+
+variablesValue valores;
 
 Enemy::Enemy(COORD spawn)
 {
@@ -45,9 +48,11 @@ bool Enemy::Logic(Map* pacman_map, COORD playerPosition)
 
 void Enemy::Draw()
 {
-	ConsoleUtils::Console_SetPos(position);
-	ConsoleUtils::Console_SetColor(foreground, background);
-	std::cout << character;
+	
+		ConsoleUtils::Console_SetPos(position);
+		ConsoleUtils::Console_SetColor(foreground, background);
+		std::cout << character;
+		
 }
 
 void Enemy::Dead() {
