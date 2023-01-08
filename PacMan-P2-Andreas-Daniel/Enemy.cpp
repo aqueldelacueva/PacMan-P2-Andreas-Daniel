@@ -49,3 +49,7 @@ void Enemy::Draw()
 	ConsoleUtils::Console_SetColor(foreground, background);
 	std::cout << character;
 }
+
+void Enemy::Dead() {
+	character = Map::MAP_EMPTY;
+}
