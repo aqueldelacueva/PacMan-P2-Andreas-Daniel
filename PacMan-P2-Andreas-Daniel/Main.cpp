@@ -1,10 +1,7 @@
 #include "Player.h"
-#include "Enemy.h"
 #include "TimeManager.h"
 #include "Variables.h"
-#include <vector>
-
-Player player(Map::spawn_player);
+#include "ConsoleUtils.h" 
 
 /// <summary>
 /// Sets the needed variables
@@ -27,6 +24,8 @@ variablesValue value;
 
 Map pacman_map = Map();
 std::vector<Enemy> enemigos = std::vector<Enemy>();
+Player player = Player(pacman_map.spawn_player);
+//USER_INPUTS input = USER_INPUTS::NONE;
 
 int main()
 {
@@ -34,6 +33,7 @@ int main()
     Setup();
     while (value.run)
     {
+        Input();
         Logic();
         Draw();
     }
@@ -42,11 +42,6 @@ int main()
 void Setup()
 {
     std::cout.sync_with_stdio(false);
-
-    pacman_map.Setup();
-    enemigos = pacman_map.Enemies();
-
-    player = Player(5, 5);
 
     srand(time(NULL));
 
@@ -61,11 +56,55 @@ void Setup()
     }
 }
 
+void Input()
+{
+    input = USER_INPUTS::NONE;
+    if (ConsoleUtils::KeyPressed(VK_UP) || ConsoleUtils::KeyPressed('W'))
+    {
+        input = USER_INPUTS::UP;
+    }
+    if (ConsoleUtils::KeyPressed(VK_DOWN) || ConsoleUtils::KeyPressed('S'))
+    {
+        input = USER_INPUTS::DOWN;
+    }
+    if (ConsoleUtils::KeyPressed(VK_RIGHT) || ConsoleUtils::KeyPressed('D'))
+    {
+        input = USER_INPUTS::RIGHT;
+    }
+    if (ConsoleUtils::KeyPressed(VK_LEFT) || ConsoleUtils::KeyPressed('A'))
+    {
+        input = USER_INPUTS::LEFT;
+    }
+    if (ConsoleUtils::KeyPressed(VK_ESCAPE) || ConsoleUtils::KeyPressed('Q'))
+    {
+        input = USER_INPUTS::QUIT;
+    }
+}
 
 void Logic()
 {
-    player.Input();
-    player.Update(pacman_map, enemigos, value);
+    if (value.win)
+    {
+        switch (player.input)
+        {
+        case QUIT:
+            value.run = false;
+            break;
+        }
+    }
+    else
+    {
+        if (player.input == USER_INPUTS::QUIT)
+        {
+            value.run = false;
+        }
+        player.Update(&pacman_map, player.input, &enemigos);
+
+        if (pacman_map.points <= 0)
+        {
+            value.win = true;
+        }
+    }
 }
 
 void Draw()
@@ -77,13 +116,11 @@ void Draw()
         enemigos[i].Draw();
     }
 
-    ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::DARK_YELLOW);
-    pacman_map.Draw();
     player.Draw();
     ConsoleUtils::Console_ClearCharacter({ 0,(short)pacman_map.Height });
     ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::CYAN);
-    ConsoleUtils::GotoXY(1, 1);
-    std::cout << "Puntuacion actual: " << player_points << " Puntuacion pendiente: " << pacman_map.points << " Vidas: " << value.lifes << std::endl;
+
+    std::cout << "Puntuacion actual: " << player.points << " Puntuacion pendiente: " << pacman_map.points << " Vidas: " << value.lifes << std::endl;
     std::cout << "Fotogramas: " << TimeManager::getInstance().frameCount << std::endl;
     std::cout << "DeltaTime: " << TimeManager::getInstance().deltaTime << std::endl;
     std::cout << "Time: " << TimeManager::getInstance().time << std::endl;
@@ -93,7 +130,7 @@ void Draw()
         ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::GREEN);
         std::cout << "Has ganado!" << std::endl;
     }
-    if (value.lifes <= 0) 
+    if (value.lifes <= 0)
     {
         ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::GREEN);
         std::cout << "HAS PERDIDO!" << std::endl;
