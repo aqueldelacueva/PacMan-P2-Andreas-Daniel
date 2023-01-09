@@ -21,9 +21,7 @@ Map::Map()
 	std::vector<std::string> Map_Load;
 	for (size_t i = 0; i < lines.size(); i++)
 	{
-		/// <summary>
-		/// aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-		/// </summary>
+		
 		if (i == 0)
 		{
 			std::string WidthTemp;
