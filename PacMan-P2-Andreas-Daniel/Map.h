@@ -2,6 +2,10 @@
 
 #include "ConsoleUtils.h"
 #include <map>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
 
 class Map
 {
@@ -21,15 +25,15 @@ public:
 	/// <summary>
 	/// The width of the map
 	/// </summary>
-	const int Width = 44;
+	int Width = 44;
 	/// <summary>
 	/// The height of the map
 	/// </summary>
-	const int Height = 19;
+	int Height = 19;
 	/// <summary>
 	/// The amount of tiles in the map
 	/// </summary>
-	const int Size = Width * Height;
+	int Size = Width * Height;
 	/// <summary>
 	/// The remaining points in the map
 	/// </summary>
