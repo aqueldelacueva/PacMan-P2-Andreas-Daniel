@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "TimeManager.h"
+#include "Variables.h"
 #include <vector>
 
 /// <summary>
@@ -19,6 +20,8 @@ void Logic();
 /// </summary>
 void Draw();
 
+variablesValue value;
+
 enum USER_INPUTS { NONE, UP, DOWN, RIGHT, LEFT, QUIT };
 Map pacman_map = Map();
 std::vector<Enemy> enemigos = std::vector<Enemy>();
@@ -27,14 +30,12 @@ int player_x = 1;
 int player_y = 1;
 int player_points = 0;
 USER_INPUTS input = USER_INPUTS::NONE;
-bool run = true;
-bool win = false;
 
 int main()
 {
 
     Setup();
-    while (run)
+    while (value.run)
     {
         Input();
         Logic();
@@ -48,15 +49,12 @@ void Setup()
 
     srand(time(NULL));
 
-    int enemy_count = 0;
+    
 
     std::cout << "How many enemies do you want?" << std::endl;
-    std::cin >> enemy_count;
+    std::cin >> value.enemy_count;
 
-    for (size_t i = 0; i < enemy_count; i++)
-    {
-        enemigos.push_back(Enemy(pacman_map.spawn_enemy));
-    }
+    
 
     player_x = pacman_map.spawn_player.X;
     player_y = pacman_map.spawn_player.Y;
@@ -89,12 +87,12 @@ void Input()
 
 void Logic()
 {
-    if (win)
+    if (value.win)
     {
         switch (input)
         {
         case QUIT:
-            run = false;
+            value.run = false;
             break;
         }
     }
@@ -106,14 +104,21 @@ void Logic()
         bool playerDie = false;
         for (size_t i = 0; i < enemigos.size(); i++)
         {
-            if (enemigos[i].Logic(&pacman_map, playerPos)) {
+            if (value.kill == false && enemigos[i].Logic(&pacman_map, playerPos)) {
                 playerDie = true;
+                value.lifes--;
+            }
+            if (value.kill && enemigos[i].Logic(&pacman_map, playerPos)) {
+                enemigos[i].Dead();
+                player_points += value.enemy_points;
             }
         }
         if (playerDie) {
             player_x = pacman_map.spawn_player.X;
             player_y = pacman_map.spawn_player.Y;
         }
+
+        
         int player_y_new = player_y;
         int player_x_new = player_x;
         switch (input)
@@ -131,7 +136,7 @@ void Logic()
             player_x_new--;
             break;
         case QUIT:
-            run = false;
+            value.run = false;
             break;
         }
         if (player_x_new < 0)
@@ -156,14 +161,35 @@ void Logic()
             player_points++;
             pacman_map.SetTile(player_x_new, player_y_new, Map::MAP_TILES::MAP_EMPTY);
             break;
+        case Map::MAP_TILES::MAP_POWERUP:
+            value.powerUp_countdown = TimeManager::getInstance().time + value.powerUp_time;
+            value.kill = true;
+            
+            pacman_map.points--;
+            player_points+= value.pwup_points;
+            pacman_map.SetTile(player_x_new, player_y_new, Map::MAP_TILES::MAP_EMPTY);
+            break;
         }
 
         player_y = player_y_new;
         player_x = player_x_new;
         if (pacman_map.points <= 0)
         {
-            win = true;
+            value.win = true;
         }
+        if (value.spawn_countdown < TimeManager::getInstance().time) {
+            if (value.enemy_current >= value.enemy_count) {
+            }
+            else {
+                for (size_t i = 0; i < 1; i++)
+                {
+                    enemigos.push_back(Enemy(pacman_map.spawn_enemy));
+                }
+                value.enemy_current++;
+                value.spawn_countdown += value.spawn_time;
+            }
+        }
+        
     }
 }
 
@@ -180,17 +206,33 @@ void Draw()
     std::cout << player_char;
     ConsoleUtils::Console_ClearCharacter({ 0,(short)pacman_map.Height });
     ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::CYAN);
-    std::cout << "Puntuacion actual: " << player_points << " Puntuacion pendiente: " << pacman_map.points << std::endl;
+    std::cout << "Puntuacion actual: " << player_points << " Puntuacion pendiente: " << pacman_map.points << " Vidas: " << value.lifes << std::endl;
+    
 
     std::cout << "Fotogramas: " << TimeManager::getInstance().frameCount << std::endl;
     std::cout << "DeltaTime: " << TimeManager::getInstance().deltaTime << std::endl;
     std::cout << "Time: " << TimeManager::getInstance().time << std::endl;
-
-    if (win)
+    std::cout << " " << std::endl;
+    if (value.kill)
+    {
+        std::cout << "POWERUP!" << std::endl;
+    }
+    if (TimeManager::getInstance().time > value.powerUp_countdown) {
+        value.powerUp_countdown = 0;
+        value.kill = false;
+    }
+    if (value.win)
     {
         ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::GREEN);
         std::cout << "Has ganado!" << std::endl;
     }
+    if (value.lifes <= 0) 
+    {
+        ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::GREEN);
+        std::cout << "HAS PERDIDO!" << std::endl;
+        value.run = false;
+    }
+    
 
     TimeManager::getInstance().NextFrame();
 }
