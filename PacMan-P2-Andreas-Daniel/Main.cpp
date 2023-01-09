@@ -25,7 +25,7 @@ variablesValue value;
 Map pacman_map = Map();
 std::vector<Enemy> enemigos = std::vector<Enemy>();
 Player player = Player(pacman_map.spawn_player);
-//USER_INPUTS input = USER_INPUTS::NONE;
+USER_INPUTS input = USER_INPUTS::NONE;
 
 int main()
 {
@@ -58,26 +58,26 @@ void Setup()
 
 void Input()
 {
-    input = USER_INPUTS::NONE;
+    player.input = USER_INPUTS::NONE;
     if (ConsoleUtils::KeyPressed(VK_UP) || ConsoleUtils::KeyPressed('W'))
     {
-        input = USER_INPUTS::UP;
+        player.input = USER_INPUTS::UP;
     }
     if (ConsoleUtils::KeyPressed(VK_DOWN) || ConsoleUtils::KeyPressed('S'))
     {
-        input = USER_INPUTS::DOWN;
+        player.inputnput = USER_INPUTS::DOWN;
     }
     if (ConsoleUtils::KeyPressed(VK_RIGHT) || ConsoleUtils::KeyPressed('D'))
     {
-        input = USER_INPUTS::RIGHT;
+        player.input = USER_INPUTS::RIGHT;
     }
     if (ConsoleUtils::KeyPressed(VK_LEFT) || ConsoleUtils::KeyPressed('A'))
     {
-        input = USER_INPUTS::LEFT;
+        player.input = USER_INPUTS::LEFT;
     }
     if (ConsoleUtils::KeyPressed(VK_ESCAPE) || ConsoleUtils::KeyPressed('Q'))
     {
-        input = USER_INPUTS::QUIT;
+        player.input = USER_INPUTS::QUIT;
     }
 }
 
